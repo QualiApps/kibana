@@ -18,4 +18,5 @@ Running the daemon
 options:
 
 `-d, default="http://localhost"` - elasticsearch domain name or IP with http
+
 `-p, default=9200` - elasticsearch port
