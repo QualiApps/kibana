@@ -17,5 +17,6 @@ ADD start-kibana.sh /usr/local/sbin/start-kibana.sh
 RUN chmod 700 /usr/local/sbin/start-kibana.sh
 
 ENTRYPOINT [ "/bin/bash", "/usr/local/sbin/start-kibana.sh" ]
+CMD [""]
 
 EXPOSE 80
