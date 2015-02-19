@@ -1,33 +1,12 @@
 #!/bin/bash
-
-ES_HOST="http://localhost"
-ES_PORT=9200
+ES_HOST=${ES_HOST:-\"+window.location.hostname+\"}
+ES_PORT=${ES_PORT:-9200}
+ES_SCHEME=${ES_SCHEME:-http}
 KIBANA_CONFIG_PATH=/usr/share/nginx/html/config.js
 
-while getopts ":d:p:" option; do
-  case "$option" in
-    d)
-      ES_HOST=${OPTARG} ;;
-    p)
-      ES_PORT=${OPTARG} ;;
-    \?)
-      echo "
-Usage: [options]
-  Options:
+#Update kibana config
+sed -i '/elasticsearch:/c\    elasticsearch: "'$ES_SCHEME'://'$ES_HOST':'$ES_PORT'",' ${KIBANA_CONFIG_PATH}
 
-   -d        elasticsearch domain name or IP with http
-   -p        elasticsearch port
-   " >&2
-      exit 1
-      ;;
-  esac
-done
+#Start nginx
+nginx -c /etc/nginx/nginx.conf -g 'daemon off;'
 
-# Update kibana config
-sed -i '/elasticsearch:/c\    elasticsearch: "'${ES_HOST}':'${ES_PORT}'",' ${KIBANA_CONFIG_PATH}
-
-# Start nginx
-/usr/sbin/nginx
-tail -f /var/log/nginx/error.log
-
-exit 0

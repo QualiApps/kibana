@@ -1,22 +1,18 @@
-FROM fedora:21
+#Kibana version 3.1.2
 
-MAINTAINER Yury Kavaliou <test@test.com>
+FROM nginx:1.7
 
-#RUN yum -y update && yum clean all
-RUN yum -y install nginx && yum clean all
-RUN yum -y install tar
+MAINTAINER Yury Kavaliou <Yury_Kavaliou@epam.com>
 
-RUN cd /tmp
-RUN curl -O https://download.elasticsearch.org/kibana/kibana/kibana-3.1.2.tar.gz
-RUN tar -xzvf ./kibana-3.1.2.tar.gz
-RUN cp -R ./kibana-3.1.2/* /usr/share/nginx/html/
-RUN rm ./kibana-3.1.2.tar.gz
-RUN rm -rf ./kibana-3.1.2
+ENV KIBANA_VERSION 3.1.2
 
+ADD https://download.elasticsearch.org/kibana/kibana/kibana-$KIBANA_VERSION.tar.gz /tmp/kibana.tar.gz
 ADD start-kibana.sh /usr/local/sbin/start-kibana.sh
-RUN chmod 700 /usr/local/sbin/start-kibana.sh
 
-ENTRYPOINT [ "/bin/bash", "/usr/local/sbin/start-kibana.sh" ]
-CMD [""]
+RUN tar xzf /tmp/kibana.tar.gz \
+	&& mv kibana-$KIBANA_VERSION/* /usr/share/nginx/html \
+	&& chmod 700 /usr/local/sbin/start-kibana.sh
 
 EXPOSE 80
+
+CMD ["/usr/local/sbin/start-kibana.sh"]
