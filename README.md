@@ -13,10 +13,13 @@ Installation
 Running the daemon
 -----------------
 
-`docker run -d -p 80:80 --name kibana qapps/kibana -d http://elasticsearch-ip -p elasticsearch-port`
+`docker run -d -p 80:80 --name kibana qapps/kibana`
 
-options:
+ENV:
+-----------------
 
-`-d, default="http://localhost"` - elasticsearch domain name or IP with http
+`ES_HOST` - elasticsearch IP
 
-`-p, default=9200` - elasticsearch port
+`ES_PORT` - elasticsearch port (defaults to 9200)
+
+`ES_SCHEME` - https|http (defaults to http)
